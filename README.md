@@ -16,7 +16,8 @@ scram b -j 8
 We are running a mu+mu- gun in the endcaps, flat in 1/pt: MuMuFlatOneOverPt2To2000_cfi.py   
 Jobs are submitted to condor.   
 The relevant parameter are configured at the top of SampleGeneration/scripts/generate_samples.py   
-Note that you might have to create the folder that is set in out_LFN_base
+Note that you might have to create the folder that is set in out_LFN_base  
+Also note that the t3submit has been customised to get 8 CPUs and 8 Gb of memory
 
 ```
 cp SampleGeneration/Configuration/python/MuMuFlatOneOverPt2To2000_cfi.py Configuration/Generator/python/
