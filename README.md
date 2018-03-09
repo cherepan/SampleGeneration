@@ -1,1 +1,27 @@
 # SampleGeneration
+
+### Install
+
+```
+cmsrel CMSSW_9_3_5
+cd CMSSW_9_3_5/src/
+cmsenv
+git cms-addpkg Configuration/Generator
+git clone https://github.com/l-cadamuro/SampleGeneration
+scram b -j 8
+```
+
+### Running the L1T generation GEN-SIM-RAW-DIGI
+
+We are running a mu+mu- gun in the endcaps, flat in 1/pt: MuMuFlatOneOverPt2To2000_cfi.py   
+Jobs are submitted to condor.   
+The relevant parameter are configured at the top of SampleGeneration/scripts/generate_samples.py   
+Note that you might have to create the folder that is set in out_LFN_base
+
+```
+cp SampleGeneration/Configuration/python/MuMuFlatOneOverPt2To2000_cfi.py Configuration/Generator/python/
+python SampleGeneration/scripts/generate_samples.py
+
+```
+
+The Particle Gun code and Configurations have been made by Jia Fu and are taken from [here](https://github.com/jiafulow/L1TMuonSimulationsMar2017)
