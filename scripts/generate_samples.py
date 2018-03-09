@@ -8,9 +8,12 @@ def writeln(f, line):
 
 tot_jobs = 500
 events_per_job = 1000
-generation_tag = 'MuMu_2to2000_flatOneOverPt_8Mar2018' ## the folder where to store the stuff
+# gen_fragment = 'MuMuFlatOneOverPt2To2000_cfi.py'
+# generation_tag = 'MuMu_2to2000_flatOneOverPt_8Mar2018' ## the folder where to store the stuff
+gen_fragment = 'MuMuFlatPt2To500_cfi.py'
+generation_tag = 'MuMu_2to500_flatPt_8Mar2018' ## the folder where to store the stuff
 out_LFN_base = '/store/group/l1upgrades/L1MuTrks'
-seed_offset = 0 ## to change for extended samples. NOTE: it must be larger than njobs in the previous production!
+seed_offset = 511 ## to change for extended samples. NOTE: it must be larger than njobs in the previous production!
 
 filename_proto     = 'MuMu_FEVTDEBUGHLT_{0}.root'
 gen_cfg_name_proto = 'gen_cfg_{0}.py'
@@ -20,9 +23,10 @@ gen_cfg_name_proto = 'gen_cfg_{0}.py'
 
 ## a long command, on multiple lines
 ## remember to leave a space at the end of each line to correctly separate the different chunks!
+## MuMuFlatOneOverPt2To2000_cfi.py
 command_proto = (
     'cmsDriver.py '
-    'MuMuFlatOneOverPt2To2000_cfi.py -n %i '
+    '%s -n %i '
     '--mc '
     '--eventcontent FEVTDEBUGHLT '
     '--datatier GEN-SIM-DIGI-RAW '
@@ -35,7 +39,7 @@ command_proto = (
     '--fileout {0} '
     '--python_filename {1} '
     '--customise_commands "process.RandomNumberGeneratorService.generator.initialSeed = {2} ; process.RandomNumberGeneratorService.VtxSmeared.initialSeed = {3}" ' ## sadly, CMSSW cmd line opts..
-) % events_per_job
+) % (gen_fragment, events_per_job)
 
 ########################################################################################################
 
@@ -58,6 +62,7 @@ tarLFN       = cmsswWorkDir + '/' + tarName
 #########################
 ## tar CMSSW for condor
 toExclude = [
+    '{0}/src/MuMu_2to2000_flatOneOverPt_8Mar2018',
     '{0}/src/{1}'.format(cmssw_version, generation_tag),
     '{0}/src/.git'.format(cmssw_version),
 ]
