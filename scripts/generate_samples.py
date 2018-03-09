@@ -6,10 +6,11 @@ def writeln(f, line):
 
 #######################################################################################################
 
-tot_jobs = 500
-events_per_job = 1000
-generation_tag = 'MuMu_TEST' ## the folder where to store the stuff
+tot_jobs = 50
+events_per_job = 100
+generation_tag = 'MuMu_2to2000_flatOneOverPt_8Mar2018_5000EvTest_8CPU_moreMem' ## the folder where to store the stuff
 out_LFN_base = '/store/group/l1upgrades/L1MuTrks'
+seed_offset = 0 ## to change for extended samples
 
 filename_proto     = 'MuMu_FEVTDEBUGHLT_{0}.root'
 gen_cfg_name_proto = 'gen_cfg_{0}.py'
@@ -91,7 +92,7 @@ print "** INFO: executing:", command
 for ijob in range(0, tot_jobs):
     filename     = filename_proto.format(ijob)
     gen_cfg_name = gen_cfg_name_proto.format(ijob)
-    rnd_seed = ijob
+    rnd_seed = ijob + seed_offset
     outputEOSName  = '%s/output/%s' % (baseEOSout, filename)
 
     command = command_proto.format(filename, gen_cfg_name, rnd_seed, rnd_seed+25)

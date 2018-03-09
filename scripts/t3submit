@@ -63,6 +63,8 @@ Error  = ${command}_\$(Cluster).stderr
 Log    = ${command}_\$(Cluster).log
 notify_user = ${LOGNAME}@FNAL.GOV
 x509userproxy = ${X509_USER_PROXY}
+request_cpus = 8
+request_memory = 8000
 Queue 1
 
 EOF
