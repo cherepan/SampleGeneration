@@ -6,14 +6,31 @@ def writeln(f, line):
 
 #######################################################################################################
 
-tot_jobs = 500
+# ###### mu+mu- guns in pt / 1overpt
+# tot_jobs = 500
+# events_per_job = 1000
+
+# # gen_fragment = 'MuMuFlatOneOverPt2To2000_cfi.py'
+# # generation_tag = 'MuMu_2to2000_flatOneOverPt_8Mar2018' ## the folder where to store the stuff
+# gen_fragment = 'MuMuFlatPt2To500_cfi.py'
+# generation_tag = 'MuMu_2to500_flatPt_8Mar2018' ## the folder where to store the stuff
+# out_LFN_base = '/store/group/l1upgrades/L1MuTrks'
+# seed_offset = 511 ## to change for extended samples. NOTE: it must be larger than njobs in the previous production!
+
+
+
+###### mu+mu- guns in at fixed pT
+tot_jobs = 50
 events_per_job = 1000
+
 # gen_fragment = 'MuMuFlatOneOverPt2To2000_cfi.py'
 # generation_tag = 'MuMu_2to2000_flatOneOverPt_8Mar2018' ## the folder where to store the stuff
-gen_fragment = 'MuMuFlatPt2To500_cfi.py'
-generation_tag = 'MuMu_2to500_flatPt_8Mar2018' ## the folder where to store the stuff
+gen_fragment = 'SingleMuPt100_endcap_pythia8_cfi.py'
+generation_tag = 'SingleMuPt100_endcap_11Mar2018' ## the folder where to store the stuff
 out_LFN_base = '/store/group/l1upgrades/L1MuTrks'
-seed_offset = 511 ## to change for extended samples. NOTE: it must be larger than njobs in the previous production!
+seed_offset = 0 ## to change for extended samples. NOTE: it must be larger than njobs in the previous production!
+
+
 
 filename_proto     = 'MuMu_FEVTDEBUGHLT_{0}.root'
 gen_cfg_name_proto = 'gen_cfg_{0}.py'
@@ -63,6 +80,9 @@ tarLFN       = cmsswWorkDir + '/' + tarName
 ## tar CMSSW for condor
 toExclude = [
     '{0}/src/MuMu_2to2000_flatOneOverPt_8Mar2018',
+    '{0}/src/MuMu_2to500_flatPt_8Mar2018',
+    '{0}/src/SingleMuPt50_endcap_11Mar2018',
+    '{0}/src/SingleMuPt75_endcap_11Mar2018',
     '{0}/src/{1}'.format(cmssw_version, generation_tag),
     '{0}/src/.git'.format(cmssw_version),
 ]
