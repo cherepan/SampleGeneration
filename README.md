@@ -3,8 +3,8 @@
 ### Install
 
 ```
-cmsrel CMSSW_9_3_5
-cd CMSSW_9_3_5/src/
+cmsrel CMSSW_9_3_7
+cd CMSSW_9_3_7/src/
 cmsenv
 git cms-addpkg Configuration/Generator
 git clone https://github.com/l-cadamuro/SampleGeneration

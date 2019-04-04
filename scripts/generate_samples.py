@@ -19,50 +19,62 @@ def writeln(f, line):
 
 
 
-# ###### mu+mu- guns in at fixed pT
-# tot_jobs = 50
-# events_per_job = 1000
-
-# # gen_fragment = 'MuMuFlatOneOverPt2To2000_cfi.py'
-# # generation_tag = 'MuMu_2to2000_flatOneOverPt_8Mar2018' ## the folder where to store the stuff
-# gen_fragment = 'SingleMuPt100_endcap_pythia8_cfi.py'
-# generation_tag = 'SingleMuPt100_endcap_11Mar2018' ## the folder where to store the stuff
-# out_LFN_base = '/store/group/l1upgrades/L1MuTrks'
-# seed_offset = 0 ## to change for extended samples. NOTE: it must be larger than njobs in the previous production!
-
-
-
-# filename_proto     = 'MuMu_FEVTDEBUGHLT_{0}.root'
-# gen_cfg_name_proto = 'gen_cfg_{0}.py'
-
-# ########################################################################################################
-
-
-###### tau -> 3mu
+###### mu+mu- guns in at fixed pT
 tot_jobs = 50
 events_per_job = 1000
 
 # gen_fragment = 'MuMuFlatOneOverPt2To2000_cfi.py'
 # generation_tag = 'MuMu_2to2000_flatOneOverPt_8Mar2018' ## the folder where to store the stuff
+
+# gen_fragment = 'SingleMuPt100_endcap_pythia8_cfi.py'
+# generation_tag = 'SingleMuPt100_endcap_11Mar2018' ## the folder where to store the stuff
+
+# gen_fragment = 'bbgun_BjetToMu_endcap_neg_pythia8_cfi.py'
+# generation_tag = 'PROVA' ## the folder where to store the stuff
+
+###### tau -> 3mu
 gen_fragment = 'Ds_to_Tau3Mu_pythia8_14TeV_cfi.py'
 generation_tag = 'Ds_to_Tau3Mu_pythia8_4Apr2019' ## the folder where to store the stuff
+
+
 out_LFN_base = '/store/group/l1upgrades/L1MuTrks'
 seed_offset = 0 ## to change for extended samples. NOTE: it must be larger than njobs in the previous production!
 
-
-filename_proto     = 'Tau3Mu_FEVTDEBUGHLT_{0}.root'
+filename_proto     = 'MuMu_FEVTDEBUGHLT_{0}.root'
 gen_cfg_name_proto = 'gen_cfg_{0}.py'
 
-########################################################################################################
 
 
+# ########################################################################################################
 
 ## a long command, on multiple lines
 ## remember to leave a space at the end of each line to correctly separate the different chunks!
 ## MuMuFlatOneOverPt2To2000_cfi.py
+
+##### Set of commnands for production in 9_3_5
+# command_proto = (
+#     'cmsDriver.py '
+#     '%s -n %i '
+#     '--mc '
+#     '--eventcontent FEVTDEBUGHLT '
+#     '--datatier GEN-SIM-DIGI-RAW '
+#     '--conditions 93X_upgrade2023_realistic_v5 '
+#     '--beamspot HLLHC14TeV '
+#     '--step GEN,SIM,DIGI:pdigi_valid,L1,L1TrackTrigger,DIGI2RAW,HLT:@fake2 '
+#     '--nThreads 8 '
+#     '--geometry Extended2023D17 '
+#     '--era Phase2_timing  '
+#     '--fileout {0} '
+#     '--python_filename {1} '
+#     '--customise_commands "process.RandomNumberGeneratorService.generator.initialSeed = {2} ; process.RandomNumberGeneratorService.VtxSmeared.initialSeed = {3}" ' ## sadly, CMSSW cmd line opts..
+# ) % (gen_fragment, events_per_job)
+
+##### Set of commnands for production in 9_3_7
+## note: to produce mu in jets filters are applied --> need to specify output number of events
+## this cannot control exactly the number of events, so if you need to produce something that has no filter, better just use -n <num_evts>
 command_proto = (
     'cmsDriver.py '
-    '%s -n %i '
+    '%s -o %i -n -1 '
     '--mc '
     '--eventcontent FEVTDEBUGHLT '
     '--datatier GEN-SIM-DIGI-RAW '
@@ -75,6 +87,7 @@ command_proto = (
     '--fileout {0} '
     '--python_filename {1} '
     '--customise_commands "process.RandomNumberGeneratorService.generator.initialSeed = {2} ; process.RandomNumberGeneratorService.VtxSmeared.initialSeed = {3}" ' ## sadly, CMSSW cmd line opts..
+    '--customise=SLHCUpgradeSimulations/Configuration/aging.customise_aging_1000 '
 ) % (gen_fragment, events_per_job)
 
 ########################################################################################################
@@ -183,4 +196,4 @@ os.chdir(generation_tag)
 for n in range(0, tot_jobs):
     command = "../SampleGeneration/scripts/t3submit %s" % outScriptNameBareProto.format(n)
     print "** INFO: submit job with command", command
-    os.system(command)
+    # os.system(command)
