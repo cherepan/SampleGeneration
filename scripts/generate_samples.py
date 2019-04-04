@@ -19,23 +19,42 @@ def writeln(f, line):
 
 
 
-###### mu+mu- guns in at fixed pT
+# ###### mu+mu- guns in at fixed pT
+# tot_jobs = 50
+# events_per_job = 1000
+
+# # gen_fragment = 'MuMuFlatOneOverPt2To2000_cfi.py'
+# # generation_tag = 'MuMu_2to2000_flatOneOverPt_8Mar2018' ## the folder where to store the stuff
+# gen_fragment = 'SingleMuPt100_endcap_pythia8_cfi.py'
+# generation_tag = 'SingleMuPt100_endcap_11Mar2018' ## the folder where to store the stuff
+# out_LFN_base = '/store/group/l1upgrades/L1MuTrks'
+# seed_offset = 0 ## to change for extended samples. NOTE: it must be larger than njobs in the previous production!
+
+
+
+# filename_proto     = 'MuMu_FEVTDEBUGHLT_{0}.root'
+# gen_cfg_name_proto = 'gen_cfg_{0}.py'
+
+# ########################################################################################################
+
+
+###### tau -> 3mu
 tot_jobs = 50
 events_per_job = 1000
 
 # gen_fragment = 'MuMuFlatOneOverPt2To2000_cfi.py'
 # generation_tag = 'MuMu_2to2000_flatOneOverPt_8Mar2018' ## the folder where to store the stuff
-gen_fragment = 'SingleMuPt100_endcap_pythia8_cfi.py'
-generation_tag = 'SingleMuPt100_endcap_11Mar2018' ## the folder where to store the stuff
+gen_fragment = 'Ds_to_Tau3Mu_pythia8_14TeV_cfi.py'
+generation_tag = 'Ds_to_Tau3Mu_pythia8_4Apr2019' ## the folder where to store the stuff
 out_LFN_base = '/store/group/l1upgrades/L1MuTrks'
 seed_offset = 0 ## to change for extended samples. NOTE: it must be larger than njobs in the previous production!
 
 
-
-filename_proto     = 'MuMu_FEVTDEBUGHLT_{0}.root'
+filename_proto     = 'Tau3Mu_FEVTDEBUGHLT_{0}.root'
 gen_cfg_name_proto = 'gen_cfg_{0}.py'
 
 ########################################################################################################
+
 
 
 ## a long command, on multiple lines
