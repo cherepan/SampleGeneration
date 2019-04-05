@@ -2,6 +2,7 @@
 
 ### Install
 
+For the 937 samples (PhaseIIFall17):
 ```
 cmsrel CMSSW_9_3_7
 cd CMSSW_9_3_7/src/
@@ -10,6 +11,18 @@ git cms-addpkg Configuration/Generator
 git clone https://github.com/l-cadamuro/SampleGeneration
 scram b -j 8
 ```
+
+For the MTD PhaseII samples (CMSSW_10_4_0_mtd5)
+```
+cmsrel CMSSW_10_4_0_mtd5
+cd CMSSW_10_4_0_mtd5/src
+cmsenv
+git cms-addpkg Configuration/Generator
+git clone https://github.com/l-cadamuro/SampleGeneration
+scram b -j 8
+```
+
+Remember to copy the user fragments from `SampleGeneration/Configuration/python` to `Configuration/Generator/python`
 
 ### Running the L1T generation GEN-SIM-RAW-DIGI
 
