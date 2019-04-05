@@ -20,7 +20,7 @@ def writeln(f, line):
 
 
 ###### mu+mu- guns in at fixed pT
-tot_jobs = 50
+tot_jobs = 5000
 events_per_job = 1000
 
 # gen_fragment = 'MuMuFlatOneOverPt2To2000_cfi.py'
@@ -34,11 +34,12 @@ events_per_job = 1000
 
 ###### tau -> 3mu
 gen_fragment = 'Ds_to_Tau3Mu_pythia8_14TeV_cfi.py'
-generation_tag = 'Ds_to_Tau3Mu_pythia8_4Apr2019' ## the folder where to store the stuff
+generation_tag = 'Ds_to_Tau3Mu_pythia8_5Apr2019_5MEvts' ## the folder where to store the stuff
 
 
 out_LFN_base = '/store/group/l1upgrades/L1MuTrks'
-seed_offset = 0 ## to change for extended samples. NOTE: it must be larger than njobs in the previous production!
+seed_offset = 1 ## to change for extended samples. NOTE: it must be larger than njobs in the previous production!
+## NOTE : seed_offset = 0 also causes problems with GEANT in the _mtd1 release... bah
 
 filename_proto     = 'Tau3Mu_{0}.root'
 # gen_cfg_name_proto = 'gen_cfg_{0}.py'
@@ -46,9 +47,25 @@ filename_proto     = 'Tau3Mu_{0}.root'
 gensim_name = 'gensim.root'
 
 #### debug options - True for a normal execution of the job
-do_tar   = False
-do_xrdcp = False
-launch   = False
+do_tar   = True
+do_xrdcp = True
+launch   = True
+
+# ########################################################################################################
+
+#########################
+## CMSSW stuff
+
+cmssw_base    = os.environ['CMSSW_BASE']
+cmssw_version = os.environ['CMSSW_VERSION']
+scram_arch    = os.environ['SCRAM_ARCH']
+cmssw_v_mtd5  = 'CMSSW_10_4_0_mtd5'
+
+print '** INFO: CMSSW located in: ', cmssw_base
+
+tarName      = '%s_tar.tgz' % cmssw_version
+cmsswWorkDir = os.path.abspath(os.path.join(cmssw_base, '..'))
+tarLFN       = cmsswWorkDir + '/' + tarName
 
 # ########################################################################################################
 
@@ -70,9 +87,9 @@ command_proto_gensim = (
     '--beamspot HLLHC14TeV '
     '--step GEN,SIM '
     '--geometry Extended2023D35 '
-    # '--era Phase2C4_timing_layer_new ' ## NOTE: this era is available in CMSSW_10_4_0_mtd1 but not in _mtd5. Moving to another era since it should not impact the GEN-SIM (sure for SIM ??)
-    '--era Phase2C4_timing_layer_bar '
-    '--fileout file:${{_CONDOR_SCRATCH_DIR}}/%s ' ## save it to the scratch area
+    '--era Phase2C4_timing_layer_new ' ## NOTE: this era is available in CMSSW_10_4_0_mtd1 but not in _mtd5. Moving to another era since it should not impact the GEN-SIM (sure for SIM ??)
+    # '--era Phase2C4_timing_layer_bar '
+    '--fileout file:%s ' ## save it to the scratch area
     '--python_filename gensimstep_cfg.py '
     '--customise_commands "process.RandomNumberGeneratorService.generator.initialSeed = {genSeed} ; process.RandomNumberGeneratorService.VtxSmeared.initialSeed = {vtxSeed}" ' ## sadly, CMSSW cmd line opts..
     '--customise Configuration/DataProcessing/Utils.addMonitoring '
@@ -82,7 +99,7 @@ command_proto_gensim = (
 command_proto_step1 = (
     'cmsDriver.py step1 '
     '-n -1 '
-    '--filein "file:${{_CONDOR_SCRATCH_DIR}}/%s" ' ## read it from the scratch area
+    '--filein "file:../../%s/src/%s" ' ## read it from the scratch area of the other release
     '--fileout file:step1.root '
     '--mc '
     '--eventcontent FEVTDEBUGHLT '
@@ -95,7 +112,7 @@ command_proto_step1 = (
     '--era Phase2C4_timing_layer_bar '
     '--python_filename step1_cfg.py '
     '--customise Configuration/DataProcessing/Utils.addMonitoring '
-) % gensim_name
+) % (cmssw_version, gensim_name)
 
 command_proto_step2 = (
     'cmsDriver.py step2 '
@@ -146,20 +163,6 @@ command_parts_MTD5 = [
 #########################
 ## folder for stuff
 os.system('mkdir ' + generation_tag)
-
-#########################
-## CMSSW stuff
-
-cmssw_base    = os.environ['CMSSW_BASE']
-cmssw_version = os.environ['CMSSW_VERSION']
-scram_arch    = os.environ['SCRAM_ARCH']
-cmssw_v_mtd5  = 'CMSSW_10_4_0_mtd5'
-
-print '** INFO: CMSSW located in: ', cmssw_base
-
-tarName      = '%s_tar.tgz' % cmssw_version
-cmsswWorkDir = os.path.abspath(os.path.join(cmssw_base, '..'))
-tarLFN       = cmsswWorkDir + '/' + tarName
 
 #########################
 ## tar CMSSW for condor
@@ -237,7 +240,7 @@ for ijob in range(0, tot_jobs):
         cp = cp_proto.format(outputFile=filename, genSeed=rnd_seed, vtxSeed=rnd_seed+25)
         # writeln(outScript, "echo '%s'" % cp.replace("'", "\\'").replace('"', '\\"')) ## ah, the quotes... ### >> removed since it messes up with quptes. Fuck bash
         writeln(outScript, "%s" % cp)
-    writeln(outScript, 'echo "... cmsRun finished with status $?"')
+    writeln(outScript, 'echo "... cmsRun - GENSIM - finished with status $?"')
     
     #### PART 2 : DIGI-RAW : to do in MTD5, plain release
     writeln(outScript, 'echo "... DOING PART 2 - DIGI-RAW"')
@@ -249,7 +252,14 @@ for ijob in range(0, tot_jobs):
         cp = cp_proto.format(outputFile=filename, genSeed=rnd_seed, vtxSeed=rnd_seed+25)
         # writeln(outScript, "echo '%s'" % cp.replace("'", "\\'").replace('"', '\\"')) ## ah, the quotes... ### >> removed since it messes up with quptes. Fuck bash
         writeln(outScript, "%s" % cp)
-        writeln(outScript, 'echo "... cmsRun finished with status $?"')
+        # writeln(outScript, 'echo "... cmsRun finished with status $?"')
+        if 'cmsDriver' in cp:
+            if 'step1' in cp and not 'step2' in cp: ## the step1
+                writeln(outScript, 'echo "... cmsRun - step1 - finished with status $?"')
+            elif 'step1' in cp and 'step2' in cp: ## step2 has both keywords - from input file
+                writeln(outScript, 'echo "... cmsRun - step2 - finished with status $?"')
+            else:
+                writeln(outScript, 'echo "... cmsRun - another step - finished with status $?"')
 
     #### PART 3 : stageout and cleaning
     writeln(outScript, 'echo "... copying output file %s to EOS in %s"' % (filename, outputEOSName))
@@ -260,6 +270,8 @@ for ijob in range(0, tot_jobs):
     # writeln(outScript, 'rm Filename1.root')
     # writeln(outScript, 'rm Filename2.root')
     writeln(outScript, 'cd ${_CONDOR_SCRATCH_DIR}')
+    writeln(outScript, 'echo "... listing the dir content"')
+    writeln(outScript, 'ls')
     writeln(outScript, 'rm -rf %s' % cmssw_version) ## remove my gen-sim area
     writeln(outScript, 'rm -rf %s' % cmssw_v_mtd5)  ## remove my digi-reco area
     writeln(outScript, 'rm -rf %s' % gensim_name)   ## remove the gensim file
