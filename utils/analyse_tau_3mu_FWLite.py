@@ -27,7 +27,8 @@ def dump_part(genparts, idx, offset="", doDaughters=False):
             dump_part(genparts, findPosition(genparts, gp.daughter(idx)), offset="  .. ", doDaughters=False)
 
 ROOT.gROOT.SetBatch()
-events = Events ('file:/eos/uscms/store/group/l1upgrades/L1MuTrks/Ds_to_Tau3Mu_pythia8_5Apr2019/output/Tau3Mu_0.root')
+#events = Events ('file:/eos/uscms/store/group/l1upgrades/L1MuTrks/Ds_to_Tau3Mu_pythia8_5Apr2019/output/Tau3Mu_0.root')
+events = Events('file:../../gensim_1000ev.root')
 
 handleGenParts = Handle ('vector<reco::GenParticle>')
 labelGenParts  = ("genParticles", "", "")

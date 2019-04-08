@@ -12,15 +12,17 @@ git clone https://github.com/l-cadamuro/SampleGeneration
 scram b -j 8
 ```
 
-For the MTD PhaseII samples (CMSSW_10_4_0_mtd5)
+For the MTD PhaseII samples (CMSSW_10_4_0_mtd1 GEN-SIM, then mtd5 for DIGI-RECO)
 ```
-cmsrel CMSSW_10_4_0_mtd5
-cd CMSSW_10_4_0_mtd5/src
+cmsrel CMSSW_10_4_0_mtd1
+cd CMSSW_10_4_0_mtd1/src
 cmsenv
 git cms-addpkg Configuration/Generator
 git clone https://github.com/l-cadamuro/SampleGeneration
 scram b -j 8
 ```
+
+Note that you only need to install the mtd1 release for the GEN-SIM tha uses my private fragment, the DIGI-RECO mtd5 release is checked automatically by the condor script.
 
 Remember to copy the user fragments from `SampleGeneration/Configuration/python` to `Configuration/Generator/python`
 

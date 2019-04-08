@@ -20,8 +20,11 @@ def writeln(f, line):
 
 
 ###### mu+mu- guns in at fixed pT
-tot_jobs = 5000
-events_per_job = 1000
+# tot_jobs = 5000
+# events_per_job = 1000
+
+tot_jobs = 250
+events_per_job = 10000
 
 # gen_fragment = 'MuMuFlatOneOverPt2To2000_cfi.py'
 # generation_tag = 'MuMu_2to2000_flatOneOverPt_8Mar2018' ## the folder where to store the stuff
@@ -33,12 +36,19 @@ events_per_job = 1000
 # generation_tag = 'PROVA' ## the folder where to store the stuff
 
 ###### tau -> 3mu
-gen_fragment = 'Ds_to_Tau3Mu_pythia8_14TeV_cfi.py'
-generation_tag = 'Ds_to_Tau3Mu_pythia8_5Apr2019_5MEvts' ## the folder where to store the stuff
+# gen_fragment = 'Ds_to_Tau3Mu_pythia8_14TeV_cfi.py'
+# generation_tag = 'Ds_to_Tau3Mu_pythia8_5Apr2019_5MEvts' ## the folder where to store the stuff
+
+# gen_fragment = 'TauTau_mp_To3muFlatPt1To10_cfi.py'
+# generation_tag = 'TauTau_mp_To3muFlatPt1To10_6Apr2019_2p5MEvts' ## the folder where to store the stuff
+
+gen_fragment = 'TauTau_pm_To3muFlatPt1To10_cfi.py'
+generation_tag = 'TauTau_pm_To3muFlatPt1To10_6Apr2019_2p5MEvts' ## the folder where to store the stuff
 
 
 out_LFN_base = '/store/group/l1upgrades/L1MuTrks'
-seed_offset = 1 ## to change for extended samples. NOTE: it must be larger than njobs in the previous production!
+# seed_offset = 1 ## to change for extended samples. NOTE: it must be larger than njobs in the previous production!
+seed_offset = 301 ## to change for extended samples. NOTE: it must be larger than njobs in the previous production!
 ## NOTE : seed_offset = 0 also causes problems with GEANT in the _mtd1 release... bah
 
 filename_proto     = 'Tau3Mu_{0}.root'
@@ -173,6 +183,9 @@ toExclude = [
     '{0}/src/SingleMuPt75_endcap_11Mar2018',
     '{0}/src/{1}'.format(cmssw_version, generation_tag),
     '{0}/src/.git'.format(cmssw_version),
+    '{0}/src/Ds_to_Tau3Mu_pythia8_5Apr2019_5MEvts'.format(cmssw_version),
+    '{0}/src/Ds_to_Tau3Mu_pythia8_5Apr2019'.format(cmssw_version),
+    '{0}/src/TauTau_mp_To3muFlatPt1To10_6Apr2019_2p5MEvts'.format(cmssw_version),
 ]
 
 # command = 'tar --exclude="{0}" --exclude="{1}" -zcf {2} -C {3} {4}'.format(excludePath, excludePath2, tarLFN, cmsswWorkDir, cmssw_version)
